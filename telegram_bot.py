@@ -11,7 +11,7 @@ from telegram.ext import Updater, CommandHandler
 # with only 1 line of code:
 # bot_token = 'bla-bla-bla(your token actually)'
 from credits import bot_token
-  
+
 #===========================================================
 # Get only overdue shipping data from sheet
 def get_overdue_shipping_data():
@@ -29,7 +29,7 @@ def get_overdue_shipping_data():
     orders_ids = worksheet.col_values(2)
     shipping_dates = worksheet.col_values(4)
     overdue_shippings = []
-    # taking only overdue shipping dates and their order IDs 
+    # taking only overdue shipping dates and their order IDs
     for i in range(1, len(shipping_dates)):
         if dt.now() >= dt.strptime(shipping_dates[i], '%d.%m.%Y'):
             overdue_shippings.append((orders_ids[i], shipping_dates[i]))
@@ -39,9 +39,9 @@ def message_constructon():
     message = '''║ Order ID  │Shipping Date║
 =======================
 '''
-    for i in range(len(overdue_shippings)):
-        message += '║ ' + overdue_shippings[i][0] + ' │  ' + overdue_shippings[i][1] + '    ║\n'
-    message += '╚═══════╧═════════╝'
+    o_s = overdue_shippings
+    for i in range(len(o_s)):
+        message += '║ ' + o_s[i][0] + ' │  ' + o_s[i][1] + '    ║\n'
     return message
 
 # Telegram bot API initialization
@@ -55,7 +55,7 @@ def commands(update, context):
                              '''Avaliable comands:
 /commands to get commands list
 /shippings to get current overdue shipping list
-/listening to start get notifications
+/listening to start get notifications if you have new overdue shippings
 /stop to stop notifications''')
 
 # /shippings
@@ -79,7 +79,7 @@ def updated_shippings(context):
 
 # /listening
 def updates_notification(update, context):
-    global current_overdue_shippings 
+    global current_overdue_shippings
     context.bot.send_message(update.effective_chat.id, 'Begin!')
     current_overdue_shippings = 0 # this helps to send 1st notification
     # checking for updates once per 10 seconds

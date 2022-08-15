@@ -9,7 +9,7 @@ pip install gspread
 ```
 [How to use gspred in russian](https://dvsemenov.ru/google-tablicy-i-python-podrobnoe-rukovodstvo-s-primerami/).
 
-Also you may find ***//token.json*** file which is used for access. (Please don't use it to hack sheets from this account 🙂)
+Also you may find ***/token.json*** file which is used for access. (Please don't use it to hack sheets from this account 🙂)
 
 ---
 Next thing you need is [PostgreSQL](https://www.postgresql.org) with [pgAdmin](https://www.pgadmin.org) or some other DB administration platform installed on your local machine. Also you need to make small changes (such as password) in test.py here:
@@ -22,7 +22,7 @@ And don't forget to install SQL module:
 ```
 pip install psycopg2
 ```
-[Guide for psycopg2 in English](https://www.psycopg.org/docs/usage.html#passing-parameters-to-sql-queries)
+[Guide for psycopg2 in Russian](https://dev-gang.ru/article/rabota-s-postgresql-v-python-xn8721sq0g/)
 
 ---
 Also be sure you have installed ***requests*** module for python:
@@ -33,11 +33,11 @@ It will help you to get currencies data from https://www.cbr.ru.
 
 ---
 ## **Running the script:**
-To test the work of the script run ***//test.py*** making all the small changings described above.
+To test the work of the script run ***/test.py*** making all the small changings described above.
 
 ---
 ## **Running the Telegram bot:**
-You may find the [telegram_bot.py](//telegram_bot.py) in repository. To check how it works you need to find the bot in Telegram:
+You may find the [telegram_bot.py](/telegram_bot.py) in repository. To check how it works you need to find the bot in Telegram:
 
 https://t.me/Channel_ServiceBot
 
@@ -49,3 +49,7 @@ The bot has few commands which you may find in it's menu:
 - /stop to stop notifications
 
 It shares all the necessary information about overdue shipppings with user.
+
+---
+## **Web app:**
+You may run [application.py](/application.py) which is not finished yet but demonstrates the way how to get Google Sheets data to your web-app. Also you may just run https://happyteacher.pythonanywhere.com.

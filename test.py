@@ -53,49 +53,52 @@ def data_insert():
     conn.commit()
 #===========================================================
 
+if __name__ == "__main__":
+    # Connection to your DB (change credentials)
+    conn = psycopg2.connect(dbname='testdb', user='postgres', 
+                            password='Dusya', host='localhost',
+                            port="5432")
+    cur = conn.cursor()
+    #===========================================================
+    # Checking if the table 'test_table' exists
+    cur.execute('''SELECT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME=%s)''',
+            ('test_table',))
+    if not cur.fetchone()[0]:
+        # if there is no 'test_table' – create one 
+        cur.execute('''CREATE TABLE test_table  
+                    (table_id INT,
+                    order_id INT,
+                    value_usd NUMERIC,
+                    value_rub NUMERIC,
+                    shipping_date DATE);''')
+        print('Table was created successfully')
+    conn.commit()
+    print('Table allready exists')
 
-# Connection to your DB (change credentials)
-conn = psycopg2.connect(dbname='testdb', user='postgres', 
-                        password='Dusya', host='localhost',
-                        port="5432")
-cur = conn.cursor()
-#===========================================================
-# Checking if the table 'test_table' exists
-cur.execute('''SELECT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES
-        WHERE TABLE_NAME=%s)''',
-        ('test_table',))
-if not cur.fetchone()[0]:
-    # if there is no 'test_table' – create one 
-    cur.execute('''CREATE TABLE test_table  
-                (table_id INT,
-                order_id INT,
-                value_usd NUMERIC,
-                value_rub NUMERIC,
-                shipping_date DATE);''')
-    print('Table was created successfully')
-conn.commit()
-print('Table allready exists')
-
-# First data insert
-get_usd_rate()
-google_sheets_initialization()
-get_sheet()
-data_insert()
-print('Data was inserted for the first time')
-
-# Data update loop
-starttime = time.time()
-current_list_of_lists = 0
-while True:
-    # get usd rate once per day
-    if date.today() != startdate:
-        startdate = date.today()
-        get_usd_rate()
-    # get sheet data once per minute
-    time.sleep(60.0 - ((time.time() - starttime) % 60.0))
+    # First data insert
+    get_usd_rate()
+    google_sheets_initialization()
     get_sheet()
-    # data insert only if sheet was updated
-    if list_of_lists != current_list_of_lists:
-        current_list_of_lists = list_of_lists
-        data_insert()
-        print("Data was updated")
+    data_insert()
+    print('Data was inserted for the first time')
+
+    # Data update loop
+    starttime = time.time()
+    current_list_of_lists = 0
+    while True:
+        # get usd rate once per day
+        if date.today() != startdate:
+            startdate = date.today()
+            get_usd_rate()
+        # get sheet data once per minute
+        time.sleep(60.0 - ((time.time() - starttime) % 60.0))
+        get_sheet()
+        # data insert only if sheet was updated
+        if list_of_lists != current_list_of_lists:
+            current_list_of_lists = list_of_lists
+            data_insert()
+            print("Data was updated")
+else:
+    google_sheets_initialization()
+    get_sheet()
